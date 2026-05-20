@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="manifest" href="/arta/manifest.json" />
+    <meta name="theme-color" content="#0b100e" />
+    <title>Trading Library Manager</title>
+    <style>
+      body {
+        margin: 0;
+        background-color: #050505;
+      }
+    </style>
+    <script type="module" crossorigin src="/arta/assets/index-DbA7jPjw.js"></script>
+    <link rel="stylesheet" crossorigin href="/arta/assets/index-DGIZicp5.css">
+  </head>
+  <body>
+    <div id="root"></div>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/arta/service-worker.js').catch(() => {});
+        });
+      }
+    </script>
+  </body>
+</html>
+
