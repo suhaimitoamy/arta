@@ -390,6 +390,7 @@ async function boot() {
   initBackGuard();
   await migrateLegacyFiles();
   disableServiceWorkerForWebPage();
+  refreshInsightCache({ renderPanel: false, showMessage: false });
 }
 
 function bindEvents() {
@@ -824,6 +825,9 @@ function setView(view, shouldRender = true) {
   });
   saveSettings();
   if (shouldRender) scheduleRender();
+  if (state.view === "assistant") {
+    updateInsightCache();
+  }
 }
 
 let renderFrameId = 0;
@@ -5065,9 +5069,28 @@ function clearInsightCache() {
   saveInsightCache();
   renderAssistantPanel();
 }
+let insightUpdateTimeout = null;
 
-function updateInsightCache() {
-  refreshInsightCache({ renderPanel: true, showMessage: true });
+function updateInsightCache(manual = false) {
+  if (insightUpdateTimeout) clearTimeout(insightUpdateTimeout);
+  if (dom.insightBox && state.view === "assistant") {
+    dom.insightBox.innerHTML = '<div style="text-align:center; padding: 20px; font-weight: 600; color: var(--accent);">Membaca jurnal terbaru...</div>';
+    insightUpdateTimeout = setTimeout(() => {
+      if (dom.insightBox && state.view === "assistant") {
+        dom.insightBox.innerHTML = '<div style="text-align:center; padding: 20px; font-weight: 600; color: var(--accent);">Menganalisis kebiasaan trading...</div>';
+        insightUpdateTimeout = setTimeout(() => {
+          refreshInsightCache({ renderPanel: true, showMessage: false });
+          if (dom.assistantMessage) {
+            dom.assistantMessage.textContent = "Insight diperbarui";
+            dom.assistantMessage.hidden = false;
+            setTimeout(() => { dom.assistantMessage.hidden = true; }, 3000);
+          }
+        }, 500);
+      }
+    }, 500);
+  } else {
+    refreshInsightCache({ renderPanel: false, showMessage: false });
+  }
 }
 
 function refreshInsightCache(options = {}) {
@@ -5081,7 +5104,10 @@ function refreshInsightCache(options = {}) {
     };
     saveInsightCache();
     if (renderPanel) renderInsightBox();
-    if (showMessage && dom.assistantMessage) dom.assistantMessage.textContent = "Insight lokal diperbarui otomatis tanpa memakai API.";
+    if (showMessage && dom.assistantMessage) {
+      dom.assistantMessage.textContent = "Insight lokal diperbarui otomatis tanpa memakai API.";
+      dom.assistantMessage.hidden = false;
+    }
   } catch {}
 }
 

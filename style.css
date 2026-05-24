@@ -4141,3 +4141,119 @@ body {
   backdrop-filter: blur(8px);
 }
 
+/* --- PREMIUM UI & ANIMATIONS --- */
+body {
+  position: relative;
+  overflow-x: hidden;
+}
+body::before {
+  content: "";
+  position: fixed;
+  top: -50%; left: -50%;
+  width: 200%; height: 200%;
+  background: radial-gradient(circle at 50% 50%, rgba(57, 255, 136, 0.02) 0%, transparent 40%),
+              radial-gradient(circle at 80% 20%, rgba(0, 255, 255, 0.015) 0%, transparent 30%);
+  animation: bg-drift 30s infinite alternate ease-in-out;
+  pointer-events: none;
+  z-index: -1;
+}
+@keyframes bg-drift {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(3%, 3%); }
+}
+
+.library-card, .media-item, .journal-card, .assistant-card, .dashboard-card {
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+@media (hover: hover) {
+  .library-card:hover, .media-item:hover, .journal-card:hover, .assistant-card:hover, .dashboard-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(57, 255, 136, 0.12), 0 0 12px rgba(57, 255, 136, 0.05);
+    border-color: rgba(57, 255, 136, 0.35);
+  }
+}
+.library-card:active, .media-item:active, .journal-card:active, .assistant-card:active, .dashboard-card:active {
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 4px 12px rgba(57, 255, 136, 0.2);
+}
+
+.video-placeholder {
+  position: relative;
+  overflow: hidden;
+}
+.video-placeholder::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(to bottom, transparent 40%, rgba(57, 255, 136, 0.1) 50%, transparent 60%);
+  background-size: 100% 6px;
+  pointer-events: none;
+  animation: scanline 6s linear infinite;
+}
+@keyframes scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+main > section {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+main > section.is-active {
+  animation: fadeSlideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+@keyframes fadeSlideUp {
+  0% { opacity: 0; transform: translateY(12px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* --- ASSISTANT LAYOUT FIXES --- */
+main {
+  padding-top: calc(var(--header-height, 60px) + 10px);
+}
+.assistant-workspace {
+  padding-bottom: 90px;
+}
+.assistant-chat-card {
+  display: flex;
+  flex-direction: column;
+}
+.assistant-chat-log {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  max-height: 50vh;
+}
+.assistant-chat-bar {
+  position: sticky;
+  bottom: 0;
+  background: var(--surface);
+  z-index: 10;
+  padding-top: 10px;
+  border-top: 1px solid var(--border, rgba(57, 255, 136, 0.1));
+}
+.insight-box {
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  max-height: 500px;
+  overflow-y: auto;
+}
+.insight-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.insight-cards .insight-card {
+  flex: 1 1 45%;
+}
+.assistant-api-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.assistant-api-body label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
